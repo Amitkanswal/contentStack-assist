@@ -1,0 +1,101 @@
+import React from "react";
+import "./style.css";
+import axios from 'axios'
+
+class Popup extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      filesToBeSent: [],
+      printcount: 10
+    };
+    // this.uploadAsset = this.uploadAsset.bind(this)
+  }
+  onDrop(e) {
+    console.log(e.target.files);
+    let formData = new FormData()
+    var file = e.target.files;
+    var fileToBeSend = this.state.filesToBeSent;
+
+    for (let i = 0; i < file.length; i++) {
+      if (fileToBeSend.length < this.state.printcount) {
+        fileToBeSend.push(file[i]);
+        console.log('file',file);
+        console.log('formData',formData);
+        
+        
+      } else {
+        alert("only 10 images can be selected");
+        fileToBeSend=[];
+        break;
+      }
+      console.log(fileToBeSend);
+      
+      // console.log(fileReader);
+      
+      this.setState({filesToBeSent:fileToBeSend},()=>{console.log('state set');
+      })
+    }
+  }
+
+  //  uploadAsset() {
+    
+ 
+  //    let headers ={
+  //      api_key :"blta0fc4e79722f497c",
+  //      authtoken:document.cookie.split('auth')[1].split('=')[1].split(";")[0]
+  //    }
+  //   //  console.log(this.state.filesToBeSent);
+     
+  //   this.state.filesToBeSent.map((el)=>{
+  //     console.log(el);
+      
+  //     formData.append(
+  //       'myFile',
+  //       el,
+  //       el.name
+  //     )
+  //     let body = {'asset[upload]':formData}
+  //     axios.post(`https://stag-new-api.contentstack.io/v3/assets?relative_urls={false}`,body,{headers})
+  //     .then(res => {
+  //       console.log(res)
+  //     })
+  //     .catch(err => {
+  //       console.error(err); 
+  //     })
+  //   })
+      
+      
+  // }
+
+  render() {
+    return (
+      <div className="popup">
+        <div className="popupInner">
+          <h1 className="dragAndDropMsg">Drag and Drop Your Images Here</h1>
+          <button onClick={this.props.closePopup}>close me</button>
+          <br />
+          <input
+            type="file"
+            id="file-browser-input"
+            name="file-browser-input"
+            ref={input => (this.fileInput = input)}
+            onDragOver={e => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+            onDrop={files => this.onDrop(files)}
+            onChange={files => this.onDrop(files)}
+            accept="image/jpg, image/jpeg"
+            multiple
+          />
+          <div className="addImages">  </div>
+          <button onClick={this.uploadAsset}>Upload</button>
+        </div>
+      </div>
+    );
+  }
+}
+
+export default Popup;
+
